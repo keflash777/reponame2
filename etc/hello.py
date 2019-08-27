@@ -1,9 +1,13 @@
-def wsgi_application(environ, start_response):
-    # бизнес-логика
+def app(environ, start_response):
+    # Returns a dictionary in which the values are lists
+
+    data = environ['QUERY_STRING']
+    d = [bytes(i + '\n', 'ascii') for i in environ['QUERY_STRING'].split('&')]
+
     status = '200 OK'
-    headers = [
-    ('Content-Type', 'text/plain')
+    response_headers = [
+        ('Content-type','text/plain'),
+        ('Content-Length', str(len(data)))
     ]
-    body = [bytes(i + '\n', 'ascii') for i in environ['QUERY_STRING'].split('&')]
-    start_response(status, headers )
-    return body
+    start_response(status, response_headers)
+    return d
